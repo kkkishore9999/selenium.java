@@ -6,7 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +33,7 @@ public class CustomNamesTest {
     @Test
     public void shouldOpen() throws InterruptedException {
         driver.navigate().to("https://ultimateqa.com/filling-out-forms/");
-        Thread.sleep(3000);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         assertEquals("Filling Out Forms - Ultimate QA", driver.getTitle());
     }
 
@@ -36,9 +41,10 @@ public class CustomNamesTest {
     public void shouldType() throws InterruptedException {
         driver.navigate().to("https://ultimateqa.com/filling-out-forms/");
         driver.findElement(By.id("et_pb_contact_name_0")).sendKeys("Kishore");
-        Thread.sleep(1000);
+        WebDriverWait wait=new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.name("et_builder_submit_button"))));
         driver.findElement(By.name("et_builder_submit_button")).click();
-        Thread.sleep(1000);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         var actualListItems = driver.findElements(By.xpath("//*[@class='et-pb-contact-message']/ul/li")).size();
         assertEquals(1, actualListItems);
     }
